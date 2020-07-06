@@ -2,11 +2,12 @@
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] GameObject _deathParticles;
     float _angle = 0;
     int _xSpeed = 3;
-    int _ySpeed = 3;
-    Rigidbody2D _rb;
+    int _ySpeed = 2;
     Vector2 _pos;
+    Rigidbody2D _rb;
     GameManager _gameManager;
 
     private void Awake()
@@ -55,6 +56,8 @@ public class Player : MonoBehaviour
 
     private void Dead()
     {
+        Instantiate(_deathParticles, transform.position, Quaternion.identity);
+        Destroy(this.gameObject);
         _gameManager.GameOver();
     }
 }

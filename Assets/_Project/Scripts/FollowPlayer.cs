@@ -2,18 +2,23 @@
 
 public class FollowPlayer : MonoBehaviour
 {
-    [SerializeField] GameObject player;
-    [SerializeField] int yOffset;
-    float smoothTime = 0.0f;
-    Vector3 velocity = Vector3.zero;
-    
+    [SerializeField] int _yOffset;
+    float _smoothTime = 0.0f;
+    Vector3 _velocity = Vector3.zero;
+    GameObject _player;
+
+    void Start() => _player = GameObject.Find("Player");
+
     void LateUpdate() => Follow();
 
     void Follow()
     {
-        Vector3 targetPosition = player.transform.TransformPoint(new Vector3(0, yOffset, -10));
-        targetPosition = new Vector3(0, targetPosition.y, targetPosition.z);
+        if (_player != null)
+        {
+            Vector3 targetPosition = _player.transform.TransformPoint(new Vector3(0, -_yOffset, -10));
+            targetPosition = new Vector3(0, targetPosition.y, targetPosition.z);
 
-        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
+            transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref _velocity, _smoothTime);
+        }
     }
 }
