@@ -4,6 +4,6 @@ public class GameManager : MonoBehaviour
 {
     public void GameOver()
     {
-        print("Game Over!");
+        print("Game Over!"); // Handle Game over logic here. Present UI restart button.
     }
 }

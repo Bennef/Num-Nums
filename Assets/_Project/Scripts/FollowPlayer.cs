@@ -2,11 +2,11 @@
 
 public class FollowPlayer : MonoBehaviour
 {
-    public GameObject player;
+    [SerializeField] GameObject player;
+    [SerializeField] int yOffset;
     float smoothTime = 0.0f;
     Vector3 velocity = Vector3.zero;
-    public int yOffset;
-
+    
     void LateUpdate() => Follow();
 
     void Follow()
