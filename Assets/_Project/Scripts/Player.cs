@@ -58,6 +58,6 @@ public class Player : MonoBehaviour
     {
         Instantiate(_deathParticles, transform.position, Quaternion.identity);
         Destroy(this.gameObject);
-        _gameManager.GameOver();
+        _gameManager.CallGameOver();
     }
 }

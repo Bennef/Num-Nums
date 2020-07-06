@@ -1,9 +1,19 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public void GameOver()
+    [SerializeField] GameObject _gameOverPanel;
+
+    public void CallGameOver() => StartCoroutine(GameOver());
+
+    IEnumerator GameOver()
     {
-        print("Game Over!"); // Handle Game over logic here. Present UI restart button.
+        yield return new WaitForSeconds(0.5f);
+        _gameOverPanel.SetActive(true);
+        yield break;
     }
+
+    public void Restart() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 }
