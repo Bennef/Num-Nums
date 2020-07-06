@@ -51,7 +51,14 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Dead();
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            Dead();
+        }
+        else if (collision.gameObject.CompareTag("Item"))
+        {
+            _gameManager.AddScore();
+        }
     }
 
     private void Dead()
