@@ -10,15 +10,7 @@ namespace Scripts.Inputs
         {
             if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.touches[0].position);
-
-                if (Physics.Raycast(ray, out RaycastHit hit))
-                {
-                    if (hit.collider != null)
-                    {
-                        return true;
-                    }
-                }
+                return true;
             }
             return false;
         }

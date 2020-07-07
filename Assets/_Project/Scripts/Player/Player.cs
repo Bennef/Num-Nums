@@ -7,6 +7,7 @@ namespace Scripts.Player
     public class Player : MonoBehaviour
     {
         [SerializeField] GameObject _deathParticles;
+        [SerializeField] float _maxVelocity;
         float _angle = 0;
         int _xSpeed = 3;
         int _ySpeed = 2;
@@ -37,6 +38,7 @@ namespace Scripts.Player
             if (_inputHandler.GetForwardButton() || _inputHandler.GetTouch())
             {
                 _rb.AddForce(new Vector2(0, _ySpeed));
+                CapVelocity();
             }
             else
             {
@@ -48,6 +50,14 @@ namespace Scripts.Player
                 {
                     _rb.velocity = new Vector2(_rb.velocity.x, 0);
                 }
+            }
+        }
+
+        void CapVelocity() 
+        {
+            if (_rb.velocity.magnitude > _maxVelocity) 
+            {
+                _rb.AddForce(new Vector2(0, -_ySpeed));
             }
         }
 
