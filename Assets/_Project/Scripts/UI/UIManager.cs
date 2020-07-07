@@ -10,11 +10,6 @@ namespace Scripts.UI
 
         public GameObject GameOverPanel { get => _gameOverPanel; }
 
-        void Start()
-        {
-            //_gameOverPanel = GameObject.Find("");
-        }
-
         public void SetScoreText(int scoreToSet) => _currentScoreText.text = scoreToSet.ToString();
 
         public void ActivatePanel(GameObject panelToActivate) => panelToActivate.SetActive(true);

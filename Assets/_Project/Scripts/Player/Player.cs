@@ -11,6 +11,7 @@ namespace Scripts.Player
         int _xSpeed = 3;
         int _ySpeed = 2;
         Vector2 _pos;
+        bool _isDead;
         Rigidbody2D _rb;
         GameManager _gameManager;
         InputHandler _inputHandler;
@@ -24,13 +25,16 @@ namespace Scripts.Player
 
         void Update()
         {
-            MovePLayer();
-            GetInput();
+            if (!_isDead)
+            {
+                MovePLayer();
+                GetInput();
+            }
         }
 
         private void GetInput()
         {
-            if (_inputHandler.GetForwardButton())
+            if (_inputHandler.GetForwardButton() || _inputHandler.GetTouch())
             {
                 _rb.AddForce(new Vector2(0, _ySpeed));
             }
@@ -69,6 +73,7 @@ namespace Scripts.Player
 
         private void Dead()
         {
+            _isDead = true;
             Instantiate(_deathParticles, transform.position, Quaternion.identity);
             Destroy(gameObject);
             _gameManager.CallGameOver();
