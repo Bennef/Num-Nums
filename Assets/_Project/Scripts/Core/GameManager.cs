@@ -15,7 +15,6 @@ namespace Scripts.Core
             _currentScore = 0;
             _uIManager = FindObjectOfType<UIManager>();
             _uIManager.SetScoreText(_uIManager.BestScoreText, PlayerPrefs.GetInt("BestScore", 0));
-            print(PlayerPrefs.GetInt("BestScore"));
         }
 
         public void CallGameOver() => StartCoroutine(GameOver());

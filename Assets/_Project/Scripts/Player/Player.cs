@@ -1,9 +1,10 @@
-﻿using Scripts.Core;
+﻿using Scripts.Cameras;
+using Scripts.Core;
 using Scripts.Inputs;
 using Scripts.UI;
 using UnityEngine;
 
-namespace Scripts.Player
+namespace Scripts.Actors
 {
     public class Player : MonoBehaviour
     {
@@ -21,6 +22,9 @@ namespace Scripts.Player
         GameManager _gameManager;
         InputHandler _inputHandler;
         BackgroundColor _backgroundColor;
+        CameraShake _cameraShake;
+
+        public bool IsDead { get => _isDead; set => _isDead = value; }
 
         void Awake()
         {
@@ -28,11 +32,12 @@ namespace Scripts.Player
             _gameManager = FindObjectOfType<GameManager>();
             _inputHandler = FindObjectOfType<InputHandler>();
             _backgroundColor = FindObjectOfType<BackgroundColor>();
+            _cameraShake = FindObjectOfType<CameraShake>();
         }
 
         void Update()
         {
-            if (!_isDead)
+            if (!IsDead)
             {
                 MovePLayer();
                 GetInput();
@@ -97,9 +102,12 @@ namespace Scripts.Player
 
         void Dead()
         {
-            _isDead = true;
-            Instantiate(_deathParticles, transform.position, Quaternion.identity);
+            IsDead = true;
+            _cameraShake.CallShake(); 
+            Destroy(Instantiate(_deathParticles, transform.position, Quaternion.identity), 0.5f);
             Destroy(gameObject);
+            _rb.velocity = new Vector2(0, 0);
+            _rb.isKinematic = true;
             _gameManager.CallGameOver();
         }
     }
