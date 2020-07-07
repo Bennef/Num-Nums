@@ -7,13 +7,15 @@ namespace Scripts.Core
 {
     public class GameManager : MonoBehaviour
     {
-        int _currentScore;
+        int _currentScore, _bestScore;
         UIManager _uIManager;
 
-        private void Start()
+        void Start()
         {
             _currentScore = 0;
             _uIManager = FindObjectOfType<UIManager>();
+            _uIManager.SetScoreText(_uIManager.BestScoreText, PlayerPrefs.GetInt("BestScore", 0));
+            print(PlayerPrefs.GetInt("BestScore"));
         }
 
         public void CallGameOver() => StartCoroutine(GameOver());
@@ -30,7 +32,17 @@ namespace Scripts.Core
         public void AddScore()
         {
             _currentScore++;
-            _uIManager.SetScoreText(_currentScore);
+            UpdateBestScore();
+            _uIManager.SetScoreText(_uIManager.CurrentScoreText, _currentScore);
+        }
+
+        void UpdateBestScore()
+        {
+            if (_currentScore > PlayerPrefs.GetInt("BestScore"))
+            {
+                PlayerPrefs.SetInt("BestScore", _currentScore);
+                _uIManager.SetScoreText(_uIManager.BestScoreText, _bestScore);
+            }
         }
     }
 }

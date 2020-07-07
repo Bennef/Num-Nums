@@ -1,6 +1,6 @@
 ﻿using Scripts.Core;
 using Scripts.Inputs;
-using UnityEditorInternal.Profiling.Memory.Experimental;
+using Scripts.UI;
 using UnityEngine;
 
 namespace Scripts.Player
@@ -9,20 +9,25 @@ namespace Scripts.Player
     {
         [SerializeField] GameObject _deathParticles, _itemEffect;
         [SerializeField] float _maxVelocity;
+
         float _angle = 0;
         int _xSpeed = 3;
         int _ySpeed = 2;
         Vector2 _pos;
+
         bool _isDead;
+        
         Rigidbody2D _rb;
         GameManager _gameManager;
         InputHandler _inputHandler;
+        BackgroundColor _backgroundColor;
 
-        private void Awake()
+        void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
             _gameManager = FindObjectOfType<GameManager>();
             _inputHandler = FindObjectOfType<InputHandler>();
+            _backgroundColor = FindObjectOfType<BackgroundColor>();
         }
 
         void Update()
@@ -34,7 +39,7 @@ namespace Scripts.Player
             }
         }
 
-        private void GetInput()
+        void GetInput()
         {
             if (_inputHandler.GetForwardButton() || _inputHandler.GetTouch())
             {
@@ -62,7 +67,7 @@ namespace Scripts.Player
             }
         }
 
-        private void MovePLayer()
+        void MovePLayer()
         {
             _pos = transform.position;
             _pos.x = Mathf.Cos(_angle) * 2;
@@ -70,7 +75,7 @@ namespace Scripts.Player
             _angle += Time.deltaTime * _xSpeed;
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
+        void OnTriggerEnter2D(Collider2D other)
         {
             if (other.gameObject.CompareTag("Obstacle"))
             {
@@ -84,12 +89,13 @@ namespace Scripts.Player
 
         void GetItem(Collider2D other)
         {
+            _backgroundColor.SetBackgroundColor();
             Destroy(Instantiate(_itemEffect, other.transform.position, Quaternion.identity), 0.5f);
             Destroy(other.gameObject.transform.parent.gameObject);
             _gameManager.AddScore();
         }
 
-        private void Dead()
+        void Dead()
         {
             _isDead = true;
             Instantiate(_deathParticles, transform.position, Quaternion.identity);
