@@ -1,12 +1,13 @@
 ﻿using Scripts.Core;
 using Scripts.Inputs;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
 namespace Scripts.Player
 {
     public class Player : MonoBehaviour
     {
-        [SerializeField] GameObject _deathParticles;
+        [SerializeField] GameObject _deathParticles, _itemEffect;
         [SerializeField] float _maxVelocity;
         float _angle = 0;
         int _xSpeed = 3;
@@ -69,16 +70,23 @@ namespace Scripts.Player
             _angle += Time.deltaTime * _xSpeed;
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        private void OnTriggerEnter2D(Collider2D other)
         {
-            if (collision.gameObject.CompareTag("Obstacle"))
+            if (other.gameObject.CompareTag("Obstacle"))
             {
                 Dead();
             }
-            else if (collision.gameObject.CompareTag("Item"))
+            else if (other.gameObject.CompareTag("Item"))
             {
-                _gameManager.AddScore();
+                GetItem(other);
             }
+        }
+
+        void GetItem(Collider2D other)
+        {
+            Destroy(Instantiate(_itemEffect, other.transform.position, Quaternion.identity), 0.5f);
+            Destroy(other.gameObject.transform.parent.gameObject);
+            _gameManager.AddScore();
         }
 
         private void Dead()
