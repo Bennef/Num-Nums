@@ -16,15 +16,15 @@ namespace Scripts.Actors
         int _ySpeed = 2;
         Vector2 _pos;
 
-        bool _isDead;
-        
         Rigidbody2D _rb;
         GameManager _gameManager;
         InputHandler _inputHandler;
         BackgroundColor _backgroundColor;
         CameraShake _cameraShake;
 
-        public bool IsDead { get => _isDead; set => _isDead = value; }
+        SpriteRenderer _spriteRenderer;
+
+        public bool IsDead { get; set; }
 
         void Awake()
         {
@@ -33,6 +33,7 @@ namespace Scripts.Actors
             _inputHandler = FindObjectOfType<InputHandler>();
             _backgroundColor = FindObjectOfType<BackgroundColor>();
             _cameraShake = FindObjectOfType<CameraShake>();
+            _spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
         void Update()
@@ -105,7 +106,7 @@ namespace Scripts.Actors
             IsDead = true;
             _cameraShake.CallShake(); 
             Destroy(Instantiate(_deathParticles, transform.position, Quaternion.identity), 0.5f);
-            Destroy(gameObject);
+            _spriteRenderer.enabled = false;
             _rb.velocity = new Vector2(0, 0);
             _rb.isKinematic = true;
             _gameManager.CallGameOver();

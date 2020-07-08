@@ -7,7 +7,7 @@ namespace Scripts.Core
 {
     public class GameManager : MonoBehaviour
     {
-        int _currentScore, _bestScore;
+        int _currentScore;
         UIManager _uIManager;
 
         void Start()
@@ -40,7 +40,7 @@ namespace Scripts.Core
             if (_currentScore > PlayerPrefs.GetInt("BestScore"))
             {
                 PlayerPrefs.SetInt("BestScore", _currentScore);
-                _uIManager.SetScoreText(_uIManager.BestScoreText, _bestScore);
+                _uIManager.SetScoreText(_uIManager.BestScoreText, PlayerPrefs.GetInt("BestScore"));
             }
         }
     }

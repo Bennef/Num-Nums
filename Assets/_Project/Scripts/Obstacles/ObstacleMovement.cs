@@ -1,16 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class ObstacleMovement : MonoBehaviour
+namespace Scripts.Obstacles
 {
-    [SerializeField] int _rotationSpeed;
-
-    void Update()
+    public class ObstacleMovement : MonoBehaviour
     {
-        if (_rotationSpeed != 0)
+        [SerializeField] int _rotationSpeed;
+
+        void Update()
         {
-            transform.Rotate(Vector3.forward * Time.deltaTime * _rotationSpeed);
-        }        
+            if (_rotationSpeed != 0)
+            {
+                transform.Rotate(Vector3.forward * Time.deltaTime * _rotationSpeed);
+            }
+        }
     }
 }
