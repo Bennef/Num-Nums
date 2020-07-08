@@ -10,13 +10,17 @@ namespace Scripts.Actors
     {
         [SerializeField] GameObject _deathParticles, _itemEffect;
         [SerializeField] float _maxVelocity;
+        [SerializeField] float velocityFactor = 0.01f;
+        [SerializeField] float dragFactor = 0.5f;
+        [SerializeField] float maxVelocity = 6f;
+        Vector3 velocity = Vector3.zero;
 
         float _angle = 0;
         int _xSpeed = 3;
         int _ySpeed = 2;
-        Vector2 _pos;
+        Vector3 _pos;
 
-        Rigidbody2D _rb;
+        //Rigidbody _rb;
         GameManager _gameManager;
         InputHandler _inputHandler;
         BackgroundColor _backgroundColor;
@@ -28,7 +32,7 @@ namespace Scripts.Actors
 
         void Awake()
         {
-            _rb = GetComponent<Rigidbody2D>();
+            //_rb = GetComponent<Rigidbody>();
             _gameManager = FindObjectOfType<GameManager>();
             _inputHandler = FindObjectOfType<InputHandler>();
             _backgroundColor = FindObjectOfType<BackgroundColor>();
@@ -36,49 +40,46 @@ namespace Scripts.Actors
             _spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
-        void Update()
+        void FixedUpdate()
         {
             if (!IsDead)
             {
                 MovePLayer();
-                GetInput();
-            }
-        }
-
-        void GetInput()
-        {
-            if (_inputHandler.GetForwardButton() || _inputHandler.GetTouch())
-            {
-                _rb.AddForce(new Vector2(0, _ySpeed));
-                CapVelocity();
-            }
-            else
-            {
-                if (_rb.velocity.y > 0)
-                {
-                    _rb.AddForce(new Vector2(0, -_ySpeed));
-                }
-                else
-                {
-                    _rb.velocity = new Vector2(_rb.velocity.x, 0);
-                }
-            }
-        }
-
-        void CapVelocity() 
-        {
-            if (_rb.velocity.magnitude > _maxVelocity) 
-            {
-                _rb.AddForce(new Vector2(0, -_ySpeed));
             }
         }
 
         void MovePLayer()
         {
+            SetXelocity();
+            SetYVelocity();
+            LookInDirectionOfTravel();
+            transform.position = _pos;
+        }
+
+        private void SetXelocity()
+        {
             _pos = transform.position;
             _pos.x = Mathf.Cos(_angle) * 2;
-            transform.position = _pos;
             _angle += Time.deltaTime * _xSpeed;
+        }
+
+        private void SetYVelocity()
+        {
+            if (_inputHandler.GetForwardButton() || _inputHandler.GetTouch())
+            {
+                velocity += new Vector3(0, 1, 0) * velocityFactor * 1000;
+            }
+
+            velocity *= dragFactor;
+            velocity = Vector3.ClampMagnitude(velocity, maxVelocity);
+            _pos.y += velocity.y * Time.deltaTime; 
+        }
+
+        void LookInDirectionOfTravel()
+        {
+            Vector3 direction = (_pos - transform.position).normalized;
+            Quaternion look = Quaternion.LookRotation(direction, Vector3.back);
+            transform.rotation = look;
         }
 
         void OnTriggerEnter2D(Collider2D other)
@@ -107,8 +108,8 @@ namespace Scripts.Actors
             _cameraShake.CallShake(); 
             Destroy(Instantiate(_deathParticles, transform.position, Quaternion.identity), 0.5f);
             _spriteRenderer.enabled = false;
-            _rb.velocity = new Vector2(0, 0);
-            _rb.isKinematic = true;
+            //_rb.velocity = new Vector2(0, 0);
+            //_rb.isKinematic = true;
             _gameManager.CallGameOver();
         }
     }
