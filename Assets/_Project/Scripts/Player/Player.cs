@@ -4,7 +4,7 @@ using Scripts.Core;
 using Scripts.Inputs;
 using Scripts.UI;
 using UnityEngine;
-// TO DO -  Add more obstacles - 6 Upload to website.
+
 namespace Scripts.Actors
 {
     public class Player : MonoBehaviour
