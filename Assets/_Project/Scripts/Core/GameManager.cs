@@ -26,7 +26,14 @@ namespace Scripts.Core
             yield break;
         }
 
-        public void Restart() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        IEnumerator Restart() 
+        {
+            yield return new WaitForSeconds(0.1f); 
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            yield break;
+        }
+
+        public void CallRestart() => StartCoroutine(Restart());
 
         public void AddScore()
         {

@@ -4,13 +4,13 @@ using Scripts.Core;
 using Scripts.Inputs;
 using Scripts.UI;
 using UnityEngine;
-// TO DO -  Change obstacles to 3d. 
+// TO DO -  Add more obstacles - 6 Upload to website.
 namespace Scripts.Actors
 {
     public class Player : MonoBehaviour
     {
         [SerializeField] GameObject _deathParticles, _itemEffect;
-        [SerializeField] float _velocityFactor = 10f;
+        [SerializeField] float _velocityFactor = 0.5f;
         [SerializeField] float _dragFactor = 0.925f;
         [SerializeField] float _maxVelocity = 6f;
         Vector3 _velocity = Vector3.zero;
@@ -97,7 +97,7 @@ namespace Scripts.Actors
         void GetItem(Collider other)
         {
             _backgroundColor.SetBackgroundColor();
-            _audioManager.PlaySound(_audioManager.ASrc, _audioManager.Numnum1);
+            _audioManager.PlayRandomSound(_audioManager.CatSounds);
             Destroy(Instantiate(_itemEffect, other.transform.position, Quaternion.identity), 0.5f);
             Destroy(other.gameObject.transform.parent.gameObject);
             _gameManager.AddScore();
@@ -107,7 +107,7 @@ namespace Scripts.Actors
         {
             IsDead = true;
             _animator.SetBool("isCrashed", true);
-            _audioManager.PlaySound(_audioManager.ASrc, _audioManager.Crash);
+            _audioManager.PlaySound(_audioManager.Crash);
             _cameraShake.CallShake(); 
             Destroy(Instantiate(_deathParticles, transform.position, Quaternion.identity), 0.5f);
             _gameManager.CallGameOver();

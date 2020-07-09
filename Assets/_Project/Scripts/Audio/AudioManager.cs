@@ -4,27 +4,22 @@ namespace Scripts.Audio
 {
     public class AudioManager : MonoBehaviour
     {
-        [SerializeField] private AudioClip _crash, _numNum1;
+        [SerializeField] AudioClip _crash;
+        [SerializeField] AudioClip[] _catSounds;
 
         public AudioClip Crash { get => _crash; }
-        public AudioClip Numnum1 { get => _numNum1; }
 
         public AudioSource ASrc { get; set; }
+        public AudioClip[] CatSounds { get => _catSounds; }
 
-        void Start()
+        void Start() => ASrc = GetComponent<AudioSource>();
+
+        public void PlaySound(AudioClip soundToPlay) => ASrc.PlayOneShot(soundToPlay);
+
+        public void PlayRandomSound(AudioClip[] clipArray)
         {
-            ASrc = GetComponent<AudioSource>();
+            int index = Random.Range(0, clipArray.Length);
+            ASrc.PlayOneShot(clipArray[index]);
         }
-
-        public void PlaySound(AudioSource aSrc, AudioClip soundToPlay) => aSrc.PlayOneShot(soundToPlay);
-        /*
-        public void StopSound(AudioSource aSrc) => aSrc.Stop();
-
-        public bool IsPlaying(AudioSource aSrc)
-        {
-            if (aSrc.isPlaying)
-                return true;
-            return false;
-        }*/
     }
 }
