@@ -143,7 +143,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6972477868441927082}
   - component: {fileID: 1650080041268808190}
-  - component: {fileID: 568899177158658093}
+  - component: {fileID: 7393699099012756592}
   m_Layer: 0
   m_Name: Circle 1
   m_TagString: Item
@@ -215,19 +215,16 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &568899177158658093
-CircleCollider2D:
+--- !u!135 &7393699099012756592
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8953790846001099992}
-  m_Enabled: 1
-  m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.25
+  m_Center: {x: 0, y: 0, z: 0}

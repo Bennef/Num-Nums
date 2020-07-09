@@ -3,41 +3,36 @@ using Scripts.Core;
 using Scripts.Inputs;
 using Scripts.UI;
 using UnityEngine;
-
+// TO DO - add sound mamager. Change obstacles to 3d. Handle death anim.
 namespace Scripts.Actors
 {
     public class Player : MonoBehaviour
     {
         [SerializeField] GameObject _deathParticles, _itemEffect;
-        [SerializeField] float _maxVelocity;
-        [SerializeField] float velocityFactor = 0.01f;
-        [SerializeField] float dragFactor = 0.5f;
-        [SerializeField] float maxVelocity = 6f;
-        Vector3 velocity = Vector3.zero;
+        [SerializeField] float _velocityFactor = 10f;
+        [SerializeField] float _dragFactor = 0.925f;
+        [SerializeField] float _maxVelocity = 6f;
+        Vector3 _velocity = Vector3.zero;
 
         float _angle = 0;
         int _xSpeed = 3;
-        int _ySpeed = 2;
         Vector3 _pos;
 
-        //Rigidbody _rb;
         GameManager _gameManager;
         InputHandler _inputHandler;
         BackgroundColor _backgroundColor;
         CameraShake _cameraShake;
 
-        SpriteRenderer _spriteRenderer;
+        //SpriteRenderer _spriteRenderer;
 
         public bool IsDead { get; set; }
 
         void Awake()
         {
-            //_rb = GetComponent<Rigidbody>();
             _gameManager = FindObjectOfType<GameManager>();
             _inputHandler = FindObjectOfType<InputHandler>();
             _backgroundColor = FindObjectOfType<BackgroundColor>();
             _cameraShake = FindObjectOfType<CameraShake>();
-            _spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
         void FixedUpdate()
@@ -67,12 +62,12 @@ namespace Scripts.Actors
         {
             if (_inputHandler.GetForwardButton() || _inputHandler.GetTouch())
             {
-                velocity += new Vector3(0, 1, 0) * velocityFactor * 1000;
+                _velocity += Vector3.up * _velocityFactor;
             }
 
-            velocity *= dragFactor;
-            velocity = Vector3.ClampMagnitude(velocity, maxVelocity);
-            _pos.y += velocity.y * Time.deltaTime; 
+            _velocity *= _dragFactor;
+            _velocity = Vector3.ClampMagnitude(_velocity, _maxVelocity);
+            _pos.y += _velocity.y * Time.deltaTime; 
         }
 
         void LookInDirectionOfTravel()
@@ -82,7 +77,7 @@ namespace Scripts.Actors
             transform.rotation = look;
         }
 
-        void OnTriggerEnter2D(Collider2D other)
+        void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Obstacle"))
             {
@@ -94,7 +89,7 @@ namespace Scripts.Actors
             }
         }
 
-        void GetItem(Collider2D other)
+        void GetItem(Collider other)
         {
             _backgroundColor.SetBackgroundColor();
             Destroy(Instantiate(_itemEffect, other.transform.position, Quaternion.identity), 0.5f);
@@ -107,9 +102,7 @@ namespace Scripts.Actors
             IsDead = true;
             _cameraShake.CallShake(); 
             Destroy(Instantiate(_deathParticles, transform.position, Quaternion.identity), 0.5f);
-            _spriteRenderer.enabled = false;
-            //_rb.velocity = new Vector2(0, 0);
-            //_rb.isKinematic = true;
+            //_spriteRenderer.enabled = false;
             _gameManager.CallGameOver();
         }
     }
