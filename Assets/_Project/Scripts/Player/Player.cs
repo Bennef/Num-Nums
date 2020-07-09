@@ -1,9 +1,10 @@
-﻿using Scripts.Cameras;
+﻿using Scripts.Audio;
+using Scripts.Cameras;
 using Scripts.Core;
 using Scripts.Inputs;
 using Scripts.UI;
 using UnityEngine;
-// TO DO - add sound mamager. Change obstacles to 3d. Handle death anim.
+// TO DO -  Change obstacles to 3d. 
 namespace Scripts.Actors
 {
     public class Player : MonoBehaviour
@@ -22,8 +23,8 @@ namespace Scripts.Actors
         InputHandler _inputHandler;
         BackgroundColor _backgroundColor;
         CameraShake _cameraShake;
-
-        //SpriteRenderer _spriteRenderer;
+        AudioManager _audioManager;
+        Animator _animator;
 
         public bool IsDead { get; set; }
 
@@ -33,6 +34,8 @@ namespace Scripts.Actors
             _inputHandler = FindObjectOfType<InputHandler>();
             _backgroundColor = FindObjectOfType<BackgroundColor>();
             _cameraShake = FindObjectOfType<CameraShake>();
+            _audioManager = FindObjectOfType<AudioManager>();
+            _animator = GetComponentInChildren<Animator>();
         }
 
         void FixedUpdate()
@@ -78,31 +81,35 @@ namespace Scripts.Actors
         }
 
         void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.CompareTag("Obstacle"))
+        {if (!IsDead)
             {
-                Dead();
-            }
-            else if (other.gameObject.CompareTag("Item"))
-            {
-                GetItem(other);
+                if (other.gameObject.CompareTag("Obstacle"))
+                {
+                    Dead();
+                }
+                else if (other.gameObject.CompareTag("Item"))
+                {
+                    GetItem(other);
+                }
             }
         }
 
         void GetItem(Collider other)
         {
             _backgroundColor.SetBackgroundColor();
+            _audioManager.PlaySound(_audioManager.ASrc, _audioManager.Numnum1);
             Destroy(Instantiate(_itemEffect, other.transform.position, Quaternion.identity), 0.5f);
             Destroy(other.gameObject.transform.parent.gameObject);
             _gameManager.AddScore();
         }
-
+        
         void Dead()
         {
             IsDead = true;
+            _animator.SetBool("isCrashed", true);
+            _audioManager.PlaySound(_audioManager.ASrc, _audioManager.Crash);
             _cameraShake.CallShake(); 
             Destroy(Instantiate(_deathParticles, transform.position, Quaternion.identity), 0.5f);
-            //_spriteRenderer.enabled = false;
             _gameManager.CallGameOver();
         }
     }
