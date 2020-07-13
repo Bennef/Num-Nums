@@ -9,7 +9,10 @@ namespace Scripts.Actors
 {
     public class Player : MonoBehaviour
     {
-        [SerializeField] GameObject _deathParticles, _itemEffect;
+        [Header("Particle Effects")]
+        [SerializeField] GameObject _deathParticles;
+        [SerializeField] GameObject _getItemEffect;
+        [Header("Player Movement")]
         [SerializeField] float _velocityFactor = 0.5f;
         [SerializeField] float _dragFactor = 0.925f;
         [SerializeField] float _maxVelocity = 6f;
@@ -98,7 +101,7 @@ namespace Scripts.Actors
         {
             _backgroundColor.SetBackgroundColor();
             _audioManager.PlayRandomSound(_audioManager.CatSounds);
-            Destroy(Instantiate(_itemEffect, other.transform.position, Quaternion.identity), 0.5f);
+            Destroy(Instantiate(_getItemEffect, other.transform.position, Quaternion.identity), 0.5f);
             Destroy(other.gameObject.transform.parent.gameObject);
             _gameManager.AddScore();
         }

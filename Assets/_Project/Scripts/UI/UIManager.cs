@@ -5,7 +5,9 @@ namespace Scripts.UI
 {
     public class UIManager : MonoBehaviour
     {
+        [Header("Panels")]
         [SerializeField] GameObject _gameOverPanel;
+        [Header("Test")]
         [SerializeField] TextMeshProUGUI _currentScoreText;
         [SerializeField] TextMeshProUGUI _bestScoreText;
 

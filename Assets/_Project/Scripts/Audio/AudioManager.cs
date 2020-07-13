@@ -4,7 +4,9 @@ namespace Scripts.Audio
 {
     public class AudioManager : MonoBehaviour
     {
+        [Header("AudioClips")]
         [SerializeField] AudioClip _crash;
+        [Header("Cat Sounds")]
         [SerializeField] AudioClip[] _catSounds;
 
         public AudioClip Crash { get => _crash; }
