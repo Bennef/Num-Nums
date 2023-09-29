@@ -7,7 +7,7 @@ namespace Scripts.UI
     {
         [Header("Panels")]
         [SerializeField] GameObject _gameOverPanel;
-        [Header("Test")]
+        [Header("Text")]
         [SerializeField] TextMeshProUGUI _currentScoreText;
         [SerializeField] TextMeshProUGUI _bestScoreText;
 

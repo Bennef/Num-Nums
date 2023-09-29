@@ -39,6 +39,7 @@ namespace Scripts.Actors
             _cameraShake = FindObjectOfType<CameraShake>();
             _audioManager = FindObjectOfType<AudioManager>();
             _animator = GetComponentInChildren<Animator>();
+            Cursor.visible = false;
         }
 
         void FixedUpdate()
@@ -51,20 +52,20 @@ namespace Scripts.Actors
 
         void MovePLayer()
         {
-            SetXelocity();
+            SetXVelocity();
             SetYVelocity();
             LookInDirectionOfTravel();
             transform.position = _pos;
         }
 
-        private void SetXelocity()
+        void SetXVelocity()
         {
             _pos = transform.position;
             _pos.x = Mathf.Cos(_angle) * 2;
             _angle += Time.deltaTime * _xSpeed;
         }
 
-        private void SetYVelocity()
+        void SetYVelocity()
         {
             if (_inputHandler.GetForwardButton() || _inputHandler.GetTouch())
             {
